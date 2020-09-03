@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.agraur.awesomequotes'
 
 android {
     compileSdkVersion 30
@@ -27,60 +27,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-}
-
-def libGroupId = 'com.agraur.awesomequotes'
-def libArtifactId = 'core'
-def libVersion = '1.0.0'
-def libLicenses = ['Apache-2.0']
-
-task sourceJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier "sources"
-}
-
-publishing {
-    publications {
-        MyPublication(MavenPublication) {
-            groupId libGroupId
-            artifactId libArtifactId
-            version libVersion
-            artifact(sourceJar)
-            artifact("$buildDir/outputs/aar/$libArtifactId-release.aar")
-            pom.withXml {
-                def dependenciesNode = asNode().getAt('dependencies')[0] ?: asNode().appendNode('dependencies')
-                // Iterate over the implementation dependencies (we don't want the test ones), adding a <dependency> node for each
-                configurations.implementation.allDependencies.each {
-                    // Ensure dependencies such as fileTree are not included.
-                    if (it.name != 'unspecified') {
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
-                    }
-                }
-            }
-        }
-    }
-}
-
-bintray {
-    user = 'grauralex'
-    key = '645d5e7bd7748da2a31a074e68e422604463b262'
-    publications = ['MyPublication']
-    pkg {
-        repo = "maven"
-        name = "$libGroupId:$libArtifactId"
-        userOrg = 'grauralex'
-        licenses = libLicenses
-        vcsUrl = 'https://github.com/en-agraur/awesome-quotes.git'
-        version {
-            name = libVersion
-            vcsTag = libVersion
-            released = new Date()
-        }
-    }
 }
