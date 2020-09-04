@@ -54,7 +54,7 @@ publishing {
             artifact("$rootDir/core/build/outputs/aar/core-release.aar")
             groupId 'com.agraur.awesomequotes'
             artifactId 'core-release'
-            version '1.0.3'
+            version '1.0.4'
         }
     }
 }
