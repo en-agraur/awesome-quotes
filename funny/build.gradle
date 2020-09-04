@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply from: "../maven_push_library.gradle"
+group = 'com.agraur.awesomequotes'
 
 android {
     compileSdkVersion 30
