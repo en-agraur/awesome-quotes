@@ -21,6 +21,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven{
+            url "https://dl.bintray.com/grauralex/maven"
+        }
         apply plugin: 'com.github.dcendents.android-maven'
         apply plugin: 'maven-publish'
     }
