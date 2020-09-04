@@ -7,19 +7,51 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.1"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.0"
 }
 
 allprojects {
     repositories {
         google()
         jcenter()
+        apply plugin: 'com.github.dcendents.android-maven'
+        apply plugin: 'maven-publish'
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+bintray {
+    user = 'grauralex'
+    key = '645d5e7bd7748da2a31a074e68e422604463b262'
+    publications = ['testMaven']
+    pkg {
+        repo = 'maven'
+        name = 'awesome-quotes'
+        userOrg = 'grauralex'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/en-agraur/awesome-quotes.git'
+        publish = true
+        version {
+            name = '3.3.3'
+            desc = 'test build'
+            vcsTag = '1.0.0'
+        }
+    }
+}
+
+publishing {
+    publications {
+        testMaven(MavenPublication) {
+            artifact("$rootDir/core/build/outputs/aar/core-release.aar")
+            groupId 'com.agraur.awesomequotes'
+            artifactId 'core-release'
+            version '1.0.3'
+        }
+    }
 }
